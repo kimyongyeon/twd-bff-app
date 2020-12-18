@@ -1,5 +1,6 @@
 package com.twd.bff.app.config;
 
+import com.twd.bff.app.common.block.BlockUrlInterceptor;
 import com.twd.bff.app.common.logging.LoggingFilter;
 import com.twd.bff.app.common.logging.RequestProcessingTimeInterceptor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +35,7 @@ public class MvcConfiguration implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new BlockUrlInterceptor());
         registry.addInterceptor(new RequestProcessingTimeInterceptor())
                 .addPathPatterns("/apihub/*")        // 인터셉터 적용할 url
                 .addPathPatterns("/twd/*")        // 인터셉터 적용할 url

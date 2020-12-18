@@ -63,9 +63,10 @@ restBackendAPI.httpDel("/api/v1/sample/hello", new HashMap<>());
 - BasicAuthConfiguration: 베이직 인증 설정 정보. 
 - FeignRetryConfiguration: 페인 리트라이 설정 정보.
 
-# 향후해야 할일
+# 향후 목표
 - 집킨, 슬루스 서버 나오면 연결
 - 레디스 연동 
+- block 패키지 관련해서 빠진 패키지들이 있어 일단 주서처리 하였음.
 
 # 스프링부트 시작
 ```

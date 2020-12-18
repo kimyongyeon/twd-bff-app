@@ -1,8 +1,6 @@
 package com.twd.bff.app.common.block;
 
-import com.skt.tdirect.core.AppConfig;
-import com.skt.tdirect.core.exceptions.BizException;
-import com.skt.tdirect.core.mvc.BlockUrlComponent;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,46 +25,49 @@ import javax.servlet.http.HttpServletResponse;
 @Slf4j
 public class BlockUrlInterceptor extends HandlerInterceptorAdapter {
 
+	// todo: 패키지를 찾아서 넣고 주석을 풀어주세요.
+
 	/**
 	 * appConfig
 	 */
-	@Autowired
-	private AppConfig appConfig;
+//	@Autowired
+//	private AppConfig appConfig;
 
 	/**
 	 * blockApi
 	 */
-	@Autowired
-	private BlockUrlComponent blockUrlComponent;
-
-	@Override
-	public boolean preHandle( HttpServletRequest request,
-								HttpServletResponse response,
-								Object handler ) throws Exception {
-
-		try {
-			// HTTP 요청 처리 전 수행할 로직 작성
-			Cookie cookieBlockHiddenKey = WebUtils.getCookie(request, "block_hidden_key");
-			String blockHiddenKey = (cookieBlockHiddenKey ==null) ? "" : cookieBlockHiddenKey.getValue();
-
-			String guideUrl = blockUrlComponent.check(blockHiddenKey, request.getSession(false), request.getRequestURI(), request.getParameterMap());
-			if (StringUtils.isNotEmpty(guideUrl)) {
-				response.sendRedirect(guideUrl);
-				return false;
-			}
-		} catch (BizException be) {
-			throw be;
-		} catch (Exception e) {
-			log.error(e.getMessage());
-		}
-
-		return super.preHandle(request, response, handler);
-	}
-
-	@Override
-	public void postHandle(HttpServletRequest request,
-	                       HttpServletResponse response, Object handler,
-	                       ModelAndView modelAndView ) throws Exception {
-		// HTTP 요청 처리 후 수행할 로직 작성
-	}
+//	@Autowired
+//	private BlockUrlComponent blockUrlComponent;
+//
+//	@SneakyThrows
+//	@Override
+//	public boolean preHandle( HttpServletRequest request,
+//								HttpServletResponse response,
+//								Object handler ) throws Exception {
+//
+//		try {
+//			// HTTP 요청 처리 전 수행할 로직 작성
+//			Cookie cookieBlockHiddenKey = WebUtils.getCookie(request, "block_hidden_key");
+//			String blockHiddenKey = (cookieBlockHiddenKey ==null) ? "" : cookieBlockHiddenKey.getValue();
+//
+//			String guideUrl = blockUrlComponent.check(blockHiddenKey, request.getSession(false), request.getRequestURI(), request.getParameterMap());
+//			if (StringUtils.isNotEmpty(guideUrl)) {
+//				response.sendRedirect(guideUrl);
+//				return false;
+//			}
+//		} catch (BizException be) {
+//			throw be;
+//		} catch (Exception e) {
+//			log.error(e.getMessage());
+//		}
+//
+//		return super.preHandle(request, response, handler);
+//	}
+//
+//	@Override
+//	public void postHandle(HttpServletRequest request,
+//	                       HttpServletResponse response, Object handler,
+//	                       ModelAndView modelAndView ) throws Exception {
+//		// HTTP 요청 처리 후 수행할 로직 작성
+//	}
 }
