@@ -28,6 +28,45 @@ restBackendAPI.httpDel("/api/v1/sample/hello", new HashMap<>());
 
 ## 2. Fegin
 
+# 로깅
+`프로파일별로 처리 되어 있다.`
+
+- default, local: info 레벨 출력
+- dev: debug 레벨 출력
+- prd: error 레벨 출력
+
+# application 설정파일 설명
+- application.yml: 공통 설정 부분 정의
+- application-default: 프로파일을 정의하지 않으면 default 환경으로 구동된다.
+- application-local: 로컬에서 본인만 특별하게 설정하여 처리해야 할때 사용.
+- application-prd: 운영환경으로 설정해야 하는 정보를 입력하여 사용해야 할때 사용.
+
+# 서킷브레이크 설정 설명
+- coreSize: 100 `default:10     - 코어(기본) thread pool 크기`
+- maximumSize: 500 `default:15     - 최대 thread pool 크기. allowMaximumSizeToDivergeFromCoreSize 값이 true여야 유효하다.`
+- timeoutInMilliseconds: 3000 `default:300ms  - Thread 사용시 - Command 쓰레드를 호출한 Caller 입장에서의 타임아웃 값`
+- maxConcurrentRequests: 20 `Call thread에서 호출할 수 있는 HystrixCommand.getFallback()에 대한 요청의 최대 수`
+- requestVolumeThreshold: 2 `Rolling Window 구간에 대한 request 처리 건수의 최소값. 이 값에 도달하기 전에 발생한 fail에 대해서는 circuit을 open 하지 않음`
+
+# 패키지 구조 
+- com.twd.bff: root 패키지
+- com.twd.bff.biz: 업무 컴포넌트 패키지
+- com.twd.bff.common: 공통 컴포넌트 패키지
+- com.twd.bff.config: 공통 설정 패키지 
+
+# 공통 설정 설명
+- MvcConfiguration: MVC 모델 관련 설정 정보 
+- RedisConfig: 레디스 설정 정보
+- RestTemplateConfig: RestTemplate 설정 정보, 커넥션풀, 타임설정 등.
+- ServiceConfig: Jackson2Object 설정 정보
+- SwaggerConfig: 스웨거 문서관리 미들웨어 설정 정보
+- BasicAuthConfiguration: 베이직 인증 설정 정보. 
+- FeignRetryConfiguration: 페인 리트라이 설정 정보.
+
+# 향후해야 할일
+- 집킨, 슬루스 서버 나오면 연결
+- 레디스 연동 
+
 # 스프링부트 시작
 ```
 # 테스트 스킵  
