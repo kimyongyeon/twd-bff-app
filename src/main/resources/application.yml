@@ -1,0 +1,56 @@
+application:
+  name: Tworld Direct Bff Project
+  title: Tworld Direct Project (sub-service-name)
+  formatted-version: 0.0.1
+
+server:
+  port: 10011
+
+spring:
+  profiles:
+      active: default
+  application:
+    name: Tworld_Direct_Bff_Project
+  main:
+    allow-bean-definition-overriding: true
+
+  tomcat:
+    accesslog:
+      pattern: ACC|%a "%{X-Forwarded-For}i" %l %u %t %s_code %B_bytes %D_usecs "%r" "%{Referer}i" "%{User-Agent}i"
+      directory: /proc/self/fd
+      prefix: 1
+      suffix: ""
+      file-date-format: ""
+      enabled: true
+    basedir: .
+
+##### Hystrix 설정 #####
+hystrix:
+  threadpool:
+    default :
+      coreSize: 100              #default:10     - 코어(기본) thread pool 크기
+      maximumSize: 500           #default:15     - 최대 thread pool 크기. allowMaximumSizeToDivergeFromCoreSize 값이 true여야 유효하다.
+#      maxQueueSize: -1           #default:-1     - BlockingQueue의 최대 큐 사이즈로 LinkedBlockingQueue에 적용됨. -1로 설정시 동기방식으로 처리됨(SyncronousQueue).
+#      keepAliveTimeMinutes: 1   #default:1      - coreSize의 초기 큐 크기가 maxQueueSize 이하까지 늘어날 수 있는데, 이 설정은 thead가 사용되지 않고 풀에 남아있을 수 있는 시간
+      allowMaximumSizeToDivergeFromCoreSize: true   #default:false   - maximumSize 설정의 적용 여부
+  command:
+    default:
+      execution:
+        isolation:
+#          strategy: THREAD #THREAD  #SEMAPHORE
+#          semaphore:
+#            maxConcurrentRequests: 600    # basically 'unlimited'
+          thread:
+            timeoutInMilliseconds: 3000  #default:300ms  - Thread 사용시 - Command 쓰레드를 호출한 Caller 입장에서의 타임아웃 값
+      fallback:
+        isolation:
+          semaphore:
+            maxConcurrentRequests: 20   # Call thread에서 호출할 수 있는 HystrixCommand.getFallback()에 대한 요청의 최대 수
+      circuitBreaker:
+        requestVolumeThreshold: 2     #default:20       - Rolling Window 구간에 대한 request 처리 건수의 최소값. 이 값에 도달하기 전에 발생한 fail에 대해서는 circuit을 open 하지 않음
+#        errorThresholdPercentage: 50    #default:50       - 이 설정값 이상의 에러율이 발생하면 circuit을 쇼트시킴
+        enabled: true
+#        sleepWindowInMilliseconds: 5000 #default:5000       - Circuit이 open 된 이후 다시 이 시간동안은 request를 거절한다. 이 설정 시간 이후의 request에 대해 circuit close 여부를 판단
+
+
+

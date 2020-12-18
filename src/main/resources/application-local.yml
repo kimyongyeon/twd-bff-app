@@ -1,0 +1,140 @@
+#application.yml 상속
+#======================================================================
+#This Project Config
+restClient:
+  readTime: 3000
+  connTimeout: 3000
+  connectionMaxTotal: 200
+  defaultMexPerRoute: 20
+  maxPerRoute: 50
+  url: localhost
+
+maxAgeSeconds: 3600
+
+spring:
+    redis:
+      sentinel:
+        master: mymaster # Name of the Redis server.
+        nodes: localhost:6379 # Comma-separated list of "host:port" pairs.
+      database: 0
+      password: 1234
+      lettuce:
+        pool:
+          max-active: 20
+          max-idle: 20
+          max-wait: -1ms
+          min-idle: 0
+        shutdown-timeout: 100ms
+      port: 6379
+#    sleuth:
+#      sampler:
+#        probability: 0.1
+#    zipkin:
+#      base-url: http://localhost:9411
+
+feign:
+  promotion-api:
+    url: http://twd-outer-apigateway/promotion-api/promotion      #http://twd-promotion-api.twd-dev-msa.svc.cluster.local/promotion
+  notice-api:
+    url: http://twd-outer-apigateway/notice-api/notice            #http://twd-notice-api.twd-dev-msa.svc.cluster.local/notice
+  wireless-api:
+    url: http://twd-outer-apigateway/wireless-api/wireless        #http://twd-wireless-api.twd-dev-msa.svc.cluster.local/wireless
+  nonwireless-api:
+    url: http://twd-outer-apigateway/nonwireless-api/nonwireless  #http://twd-nonwireless-api.twd-dev-msa.svc.cluster.local/nonwireless
+  order-api:
+    url: http://twd-outer-apigateway/order-api/order           #http://twd-order-api.twd-dev-msa.svc.cluster.local/order
+  customer-api:
+    url: http://twd-outer-apigateway/customer-api/customer        #http://twd-customer-api.twd-dev-msa.svc.cluster.local/customer
+  dsds-api:
+    url: http://twd-outer-apigateway/dsds-api/dsds
+  actuator-api:
+    url: http://twd-outer-apigateway
+
+external-api:
+      http-bin: https://httpbin.org
+
+################################################################################
+## Custom Configuration
+################################################################################
+
+site:
+  # SITE 도메인
+  pc-domain: https://shop.tworld.co.kr
+  mobile-domain: https://m.shop.tworld.co.kr
+  domain: ${site.mobile-domain}
+
+  # Maven Build 시점에 발행되는 키로 배포시 웹브라우저, CDN 서버 캐시 해제를 위해 사용
+#  cache-version: @maven.build.key@
+
+  # CDN 주소
+  cdn-web-resource-root-path: https://cdnm.shop.tworld.co.kr
+
+  # 인입채널(PC 또는 Mobile)의 CDN : Git 서버의 Repository(POC-Web 또는 POC-Mobile)에서 배포된 public 폴더의 웹경로 Prefix
+  # Repository/public -> CDN/public 매핑 관계
+  cdn-web-resource-public-path: ${site.cdn-web-resource-root-path}/public
+
+  # PC/Mobile 공용 CDN : 어드민에서 업로드한 리소스 파일의 웹경로 Prefix
+  cdn-web-resource-pimg-path: ${site.cdn-web-resource-root-path}/pimg
+
+  # Non CDN : Git 서버의 BFF Repository(twd-bff-web 또는 twd-bff-mobile)에서 관리되는 웹리소스
+  # Repository/src/main/webapp/static -> BFF/public 매핑관계
+  bff-web-resource-root-path: /public
+
+  # DBP Tracker
+  dbp-tracker-url: https://dbp.sktelecom.com
+  dbp-site-id: 101
+
+tdirect:
+  tid:
+    client_type: MWEB
+    client-id: a378123f-c9ba-4c07-ae45-df462b6c681d
+    client-secret: dfa9818c-a0e5-4c76-80c2-55ba13acc9ab
+    auth-url-endpoint: https://auth.skt-id.co.kr/auth/authorize.do
+    auth-url-logout: http://auth.skt-id.co.kr/sso/web/v1/ssologout.do
+    #return-url: https://m.shop.tworld.co.kr/login/tid/callback
+    return-url: /login/tid/callback
+    tdirect-domain-port: https://m.shop.tworld.co.kr
+  ipin:
+    site-cd: EB31
+    site-pw: D8irEc!T
+    return-url: ${site.mobile-domain}/auth/nice/ipin-result
+  mtw:
+    mtw-sso-enc-key: MTW-TD-7551e058f
+
+nonwireless:
+  accessory-row-count: 10
+  board-row-count: 10
+
+wireless:
+  mobile-image-path: https://cdnm.shop.tworld.co.kr
+  web-image-path: https://cdnw.shop.tworld.co.kr
+  tmap-join-url: https://api2.sktelecom.com/tmap/js
+  tmap-join-app-key: 08ef3d9a-96e9-49ad-b7da-c69d7b4cef89
+  tsmart-url: https://bpm.tmoacoupon.co.kr:469/auth/tdirect.do  # DEV 포인트 팝업 MOBILE URL #PRD : https://bpm.tmoacoupon.co.kr:469/auth/tdirect.do
+  msl-url: https://rec.sktmls.com/v1/twd/items/prcpln       # MLS Url
+  msl-key: ZP5RQA9PCUPFGI3T96CNWHULLUCJ9CXOWLX13NZD             # MLS API key
+  vas-url: https://rec.sktmls.com/v1/twd/items                  # 부가서비스 MLS Url
+  vas-key: ZP5RQA9PCUPFGI3T96CNWHULLUCJ9CXOWLX13NZD             # 부가서비스 API key
+  vas-impression-url: https://ct.sktmls.com/v1/twd/impression      # 부가서비스 MLS impression Url
+  vas-click-url:      https://ct.sktmls.com/v1/twd/click           # 부가서비스 MLS click Url
+  vas-detailView-url: https://ct.sktmls.com/v1/twd/detail_view     # 부가서비스 MLS detailView Url
+  live-chat-url: https://chat.tworld.co.kr:17443
+
+kcp:
+  js-url: https://pay.kcp.co.kr/plugin/payplus_web.jsp
+  mobile-site-cd: U4619
+  accessory-site-cd: B2156
+  iot-site-cd: B2156
+
+skpay:
+  js-agent-url: https://pay-auth.sk-pay.co.kr/pages/js/v3/lib/crypto/encryptedUserAgent.js
+  js-sdk-url: https://pay-auth.sk-pay.co.kr/pages/skpay/SKpaySDK.js
+  return-url: /order-skpay-return
+
+kmc:
+  self-cert-rslt-domain: ${site.mobile-domain}
+  self-cert-cpid: SKTM1005
+  self-cert-url: https://www.kmcert.com/kmcis/web/kmcisReq.jsp
+
+livechat:
+  name: LIVE

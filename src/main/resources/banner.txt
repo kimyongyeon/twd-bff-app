@@ -1,0 +1,16 @@
+${Ansi.YELLOW}***********************************************************************
+${Ansi.GREEN}  _________   ____      ____  ______
+${Ansi.GREEN} |  _   _  | |_  _|    |_  _||_   _ `.
+${Ansi.GREEN} |_/ | | \_|   \ \  /\  / /    | | `. \
+${Ansi.GREEN}     | |        \ \/  \/ /     | |  | |
+${Ansi.GREEN}    _| |_        \  /\  /     _| |_.' /
+${Ansi.GREEN}   |_____|        \/  \/     |______.'
+${Ansi.GREEN}
+${Ansi.GREEN}Application                    : ${application.name}
+${Ansi.GREEN}Port                           : ${server.port}
+${Ansi.GREEN}Active                         : ${spring.profiles.active}
+${Ansi.GREEN}Application Version            : ${application.formatted-version}
+${Ansi.GREEN}Application Title              : ${application.title}
+${Ansi.GREEN}Spring Boot Version            : ${spring-boot.version}
+${Ansi.GREEN}Spring Boot Formatted Version  : ${spring-boot.formatted-version}
+${Ansi.YELLOW}***********************************************************************
