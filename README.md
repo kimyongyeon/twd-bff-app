@@ -58,12 +58,14 @@ restBackendAPI.httpDel("/api/v1/sample/hello", new HashMap<>());
 - MvcConfiguration: MVC 모델 관련 설정 정보 
 - RedisConfig: 레디스 설정 정보
 - RestTemplateConfig: RestTemplate 설정 정보, 커넥션풀, 타임설정 등.
+
   - readTime: 3000 `소켓통신 상태 3초`
   - connTimeout: 3000 `연결시도 3초`
   - connectionMaxTotal: 200 `연결유지 최대 개수`
     - 참고: Tomcat Heap Size Issue 발생시 커넥션수를 줄여라. 또는 Tomcat Heap 메모리 크기를 늘려줘라
   - defaultMaxPerRoute: 20 `어떤 경로든 최대 연결수`
-  - maxPerRoute: 50 `전달되는 경로에 대해서 최대 연결 갯수, defaultMaxPerRoute 무시함` 
+  - maxPerRoute: 50 `전달되는 경로에 대해서 최대 연결 갯수, defaultMaxPerRoute 무시함`
+   
 - ServiceConfig: Jackson2Object 설정 정보
 - SwaggerConfig: 스웨거 문서관리 미들웨어 설정 정보
 - BasicAuthConfiguration: 베이직 인증 설정 정보. 
