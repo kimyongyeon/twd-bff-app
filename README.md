@@ -1,26 +1,28 @@
 # 통신 방법
 ## 1. RestTemplate
 ### header 설정방법
-```$xslt
+```
 RestBackendApiHeadersVO.key = "test";
 RestBackendApiHeadersVO.value = "test12345";
 ResponseEntity<?> responseEntity = restBackendAPI.httpGet("/api/v1/sample/hello", new HashMap<>());
 ```
+
 ### map 설정방법
 ```
 Map paramMap = new HashMap();
 paramMap.put("key","value");
 ResponseEntity<?> responseEntity = restBackendAPI.httpGet("/api/v1/sample/hello", paramMap);
 ```
+
 ### 메서드별 호출방법
 ```
-# GET 메서드
+1. GET 메서드
 restBackendAPI.httpGet("/api/v1/sample/hello", new HashMap<>());
-# POST 메서드
+2. POST 메서드
 restBackendAPI.httpPost("/api/v1/sample/hello", new HashMap<>());
-# PUT 메서드
+3. PUT 메서드
 restBackendAPI.httpPut("/api/v1/sample/hello", new HashMap<>());
-# DELETE 메서드
+4. DELETE 메서드
 restBackendAPI.httpDel("/api/v1/sample/hello", new HashMap<>());
 ```
 
