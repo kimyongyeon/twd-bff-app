@@ -5,7 +5,7 @@ restClient:
   readTime: 3000
   connTimeout: 3000
   connectionMaxTotal: 200
-  defaultMexPerRoute: 20
+  defaultMaxPerRoute: 20
   maxPerRoute: 50
   url: localhost
 

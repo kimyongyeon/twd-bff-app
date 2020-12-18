@@ -24,7 +24,7 @@ public class RestTemplateConfig {
     @Value("${restClient.connectionMaxTotal:20}")
     private int CONN_MAX_TOTAL;
 
-    @Value("${restClient.defaultMexPerRoute:20}")
+    @Value("${restClient.defaultMaxPerRoute:20}")
     private int CONN_DEFAULT_MAX_PER_ROUTE;
 
     @Value("${restClient.maxPerRoute:50}")
