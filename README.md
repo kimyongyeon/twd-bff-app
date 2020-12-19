@@ -31,6 +31,16 @@ spring:
     name: Tworld_Direct_Bff_Project <= 최초수정
 ```
 
+## pom.xml 제목 수정
+groupId, artifactId, name, description 내용을 컴포넌트 특징에 맞게 변경 
+
+```
+<groupId>com.twd.bff.app</groupId> 
+<artifactId>twd-bff-app</artifactId>
+<name>twd-bff-app</name>
+<description>Tworld Direct Backend Front App</description>
+```
+
 ## banner.txt 제목 변경
 `아래 사이트를 이동후 제목을 만들어 넣어주세면 됩니다.`
 http://patorjk.com/software/taag/#p=display&f=Calvin%20S&t=TWD%20BFF%20PROJECT
