@@ -47,8 +47,9 @@ feign:
     url: http://twd-outer-apigateway/dsds-api/dsds
   actuator-api:
     url: http://twd-outer-apigateway
+
 external-api:
-  http-bin: https://httpbin.org
+  http-bin: http://localhost:10011
 ################################################################################
 ## Custom Configuration
 ################################################################################

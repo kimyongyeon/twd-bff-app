@@ -24,7 +24,7 @@ import static com.twd.bff.app.common.constant.CommonConstant.OK_RESP_MSG;
 @Profile(value = {"local", "default"})
 @RequestMapping("/api/v1/sample")
 @RestController
-@Api(value = "SampleController V1")
+@Api(value="SampleController", tags = "샘플 테스트 APIs")
 public class SampleController {
 
     @Autowired
@@ -34,6 +34,9 @@ public class SampleController {
     SampleService sampleService;
 
     @ApiOperation(value = "get", notes = "sample get 함수 입니다.")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "name", value="이름", dataType = "String", paramType="query"),
+    })
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK !!"),
             @ApiResponse(code = 500, message = "Internal Server Error !!"),
@@ -53,6 +56,27 @@ public class SampleController {
                 .respCode(OK_RESP_CODE)
                 .build();
     }
+
+    @ApiOperation(value = "feignTest", notes = "sample feignTest 함수 입니다.")
+    @GetMapping("/feignTest")
+    public ApiMessageVO feignTest(String name) {
+        return ApiMessageVO.builder()
+                .resMsg(OK_RESP_MSG)
+                .respBody(sampleService.hello(name))
+                .respCode(OK_RESP_CODE)
+                .build();
+    }
+
+    @ApiOperation(value = "feignHello", notes = "sample feignHello 함수 입니다.")
+    @GetMapping("/feignHello")
+    public ApiMessageVO feignHello(String name) {
+        return ApiMessageVO.builder()
+                .resMsg(OK_RESP_MSG)
+                .respBody("feignHello: " + name)
+                .respCode(OK_RESP_CODE)
+                .build();
+    }
+
 
     @ApiOperation(value = "hello", notes = "sample hello 함수 입니다.")
     @GetMapping("/hello")

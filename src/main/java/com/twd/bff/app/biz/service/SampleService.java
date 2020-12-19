@@ -1,6 +1,7 @@
 package com.twd.bff.app.biz.service;
 
 import com.google.gson.Gson;
+import com.twd.bff.app.biz.feign.SampleFeign;
 import com.twd.bff.app.common.util.RestBackendAPI;
 import com.twd.bff.app.common.vo.ApiMessageVO;
 import com.twd.bff.app.common.vo.RestBackendApiHeadersVO;
@@ -20,12 +21,21 @@ public interface SampleService {
     String del(Map param);
     String put(Map param);
 
+    String hello(String name);
+
     @Service
     @Slf4j
     class SampleServiceImpl implements SampleService {
 
         @Autowired
         RestBackendAPI restBackendAPI;
+
+        @Autowired
+        SampleFeign sampleFeign;
+
+        public String hello(String name) {
+            return sampleFeign.hello(name);
+        }
 
         @Override
         public String get(Map param) {
