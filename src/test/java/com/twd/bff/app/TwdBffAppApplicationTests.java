@@ -65,7 +65,7 @@ class TwdBffAppApplicationTests {
 
         ApiMessageVO apiMessageVO = ApiMessageVO.builder()
                 .resMsg(OK_RESP_MSG)
-                .respBody(new SampleVO())
+                .respBody(SampleVO.builder().build())
                 .respCode(OK_RESP_CODE)
                 .build();
 

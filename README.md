@@ -1,3 +1,46 @@
+# 프로젝트 최초 구성시
+## application.yml 제목, 타이틀 변경
+```
+application:
+  name: Tworld Direct Bff Project
+  title: Tworld Direct Project (sub-service-name)  <= 최초수정 
+  formatted-version: 0.0.1
+
+server:
+  port: 10011
+
+spring:
+  profiles:
+      active: default
+  application:
+    name: Tworld_Direct_Bff_Project <= 최초수정
+```
+
+## banner.txt 제목 변경
+`아래 사이트를 이동후 제목을 만들어 넣어주세면 됩니다.`
+http://patorjk.com/software/taag/#p=display&f=Calvin%20S&t=TWD%20BFF%20PROJECT
+
+```   
+${Ansi.YELLOW}***********************************************************************
+${Ansi.GREEN} ╔╦╗╦ ╦╔╦╗  ╔╗ ╔═╗╔═╗  ╔═╗╦═╗╔═╗ ╦╔═╗╔═╗╔╦╗
+${Ansi.GREEN}  ║ ║║║ ║║  ╠╩╗╠╣ ╠╣   ╠═╝╠╦╝║ ║ ║║╣ ║   ║
+${Ansi.GREEN}  ╩ ╚╩╝═╩╝  ╚═╝╚  ╚    ╩  ╩╚═╚═╝╚╝╚═╝╚═╝ ╩
+${Ansi.GREEN}Application                    : ${application.name}
+${Ansi.GREEN}Port                           : ${server.port}
+${Ansi.GREEN}Active                         : ${spring.profiles.active}
+${Ansi.GREEN}Application Version            : ${application.formatted-version}
+${Ansi.GREEN}Application Title              : ${application.title}
+${Ansi.GREEN}Spring Boot Version            : ${spring-boot.version}
+${Ansi.GREEN}Spring Boot Formatted Version  : ${spring-boot.formatted-version}
+${Ansi.YELLOW}***********************************************************************
+```
+
+# 샘플코드 위치 
+- controller: src\main\java\com\twd\bff\app\biz\controller\SampleController.java
+- service: src\main\java\com\twd\bff\app\biz\service\SampleService.java
+- feign: src\main\java\com\twd\bff\app\biz\feign\SampleFeign.java
+- vo: src\main\java\com\twd\bff\app\biz\vo\SampleVO.java
+
 # 통신 방법
 ## 1. RestTemplate
 ### header 설정방법
@@ -76,15 +119,107 @@ restBackendAPI.httpDel("/api/v1/sample/hello", new HashMap<>());
 - 레디스 연동 
 - block 패키지 관련해서 빠진 패키지들이 있어 일단 주서처리 하였음.
 
+# 유틸
+## 마스킹 사용예시
+
+```
+MaskingHelper.init(Constants.LANG_CD);
+
+// 생년월일 
+String birthType = MaskingTypeEnum.MaskBirth.getCode();
+String birthMaskingStr = MaskingHelper.maskString(birthType, mapresult.get("birth").toString());
+
+// mdn 코드 
+String mdnType = MaskingTypeEnum.MaskCellOne.getCode();
+String mdnMaskingStr = MaskingHelper.maskString(mdnType, mapresult.get("mdn").toString());
+
+// 이름 
+String nameType = MaskingTypeEnum.MaskName.getCode();
+String nameMaskingStr = MaskingHelper.maskString(nameType, mapresult.get("name").toString());
+
+// 이메일 
+String emailType = MaskingTypeEnum.MaskEmail.getCode();
+String emailMaskingStr = MaskingHelper.maskString(emailType, mapresult.get("email_addr").toString());
+
+```
+
 # 스프링부트 시작
 ```
-# 테스트 스킵  
+//////////////////////////////////////////////////////////////////
+# 테스트 스킵 jar 생성 방법
+//////////////////////////////////////////////////////////////////
+
 1. mvnw clean install -DskipTests
 2. mvnw clean install -Dmaven.test.skip=true
 
-# 스프링 시작 
+//////////////////////////////////////////////////////////////////
+# 스프링 시작 방법 
+//////////////////////////////////////////////////////////////////
+
 mvnw spring-boot:run
-java -jar target/twd-bff-app-0.0.1-SNAPSHOT.jar
+java -jar target/twd-bff-app-0.0.1-SNAPSHOT.jar -Dspring.profiles.active=local
+
+//////////////////////////////////////////////////////////////////
+# 프로파일 주입 방식
+//////////////////////////////////////////////////////////////////
+
+##################################################################
+1. WebApplicationInitializer 인터페이스를 통한 방법
+##################################################################
+@Configuration
+public class MyWebApplicationInitializer 
+  implements WebApplicationInitializer {
+ 
+    @Override
+    public void onStartup(ServletContext servletContext) throws ServletException {
+  
+        servletContext.setInitParameter(
+          "spring.profiles.active", "dev");
+    }
+}
+
+##################################################################
+2. ConfigurableEnvironment 를 통한 방법
+##################################################################
+@Autowired
+private ConfigurableEnvironment env;
+env.setActiveProfiles("someProfile");
+
+##################################################################
+3. JVM 파라미터를 통한 방법
+##################################################################
+-Dspring.profiles.active=dev
+
+##################################################################
+4. 환경변수를 통한 방법
+##################################################################
+export spring_profiles_active=dev
+
+##################################################################
+5. Maven profiles를 통한 방법
+##################################################################
+<profiles>
+    <profile>
+        <id>dev</id>
+        <activation>
+            <activeByDefault>true</activeByDefault>
+        </activation>
+        <properties>
+            <spring.profiles.active>dev</spring.profiles.active>
+        </properties>
+    </profile>
+    <profile>
+        <id>prod</id>
+        <properties>
+            <spring.profiles.active>prod</spring.profiles.active>
+        </properties>
+    </profile>
+</profiles>
+
+##################################################################
+6. 메이븐 방식 -P parameter 방법
+##################################################################
+mvn clean package -Plocal
 
 ```
 

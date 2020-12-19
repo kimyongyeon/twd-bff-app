@@ -35,12 +35,9 @@ public class MvcConfiguration implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new BlockUrlInterceptor());
+//        registry.addInterceptor(new BlockUrlInterceptor());
         registry.addInterceptor(new RequestProcessingTimeInterceptor())
-                .addPathPatterns("/apihub/*")        // 인터셉터 적용할 url
-                .addPathPatterns("/twd/*")        // 인터셉터 적용할 url
-                .addPathPatterns("/csp/**/*")		// 인터셉터 적용할 url
-                .addPathPatterns("/smartplanner/*")		// 인터셉터 적용할 url
+                .addPathPatterns("/api/v1/**")        // 인터셉터 적용할 url
         ;
     }
 

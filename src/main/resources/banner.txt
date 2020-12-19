@@ -1,11 +1,7 @@
 ${Ansi.YELLOW}***********************************************************************
-${Ansi.GREEN}  _________   ____      ____  ______
-${Ansi.GREEN} |  _   _  | |_  _|    |_  _||_   _ `.
-${Ansi.GREEN} |_/ | | \_|   \ \  /\  / /    | | `. \
-${Ansi.GREEN}     | |        \ \/  \/ /     | |  | |
-${Ansi.GREEN}    _| |_        \  /\  /     _| |_.' /
-${Ansi.GREEN}   |_____|        \/  \/     |______.'
-${Ansi.GREEN}
+${Ansi.GREEN} ╔╦╗╦ ╦╔╦╗  ╔╗ ╔═╗╔═╗  ╔═╗╦═╗╔═╗ ╦╔═╗╔═╗╔╦╗
+${Ansi.GREEN}  ║ ║║║ ║║  ╠╩╗╠╣ ╠╣   ╠═╝╠╦╝║ ║ ║║╣ ║   ║
+${Ansi.GREEN}  ╩ ╚╩╝═╩╝  ╚═╝╚  ╚    ╩  ╩╚═╚═╝╚╝╚═╝╚═╝ ╩
 ${Ansi.GREEN}Application                    : ${application.name}
 ${Ansi.GREEN}Port                           : ${server.port}
 ${Ansi.GREEN}Active                         : ${spring.profiles.active}

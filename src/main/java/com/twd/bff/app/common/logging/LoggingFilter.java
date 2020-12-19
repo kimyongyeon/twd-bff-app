@@ -2,6 +2,7 @@ package com.twd.bff.app.common.logging;
 
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.StopWatch;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -17,6 +18,7 @@ import java.util.Map;
 public class LoggingFilter extends OncePerRequestFilter {
 
     protected String targetActive = "";
+    private String ACTIVE_PROFILE = "prd";
 
     public LoggingFilter(String active) {
         this.targetActive = active;
@@ -38,48 +40,36 @@ public class LoggingFilter extends OncePerRequestFilter {
             String requestString = "";
             Map<String, Object> requestMap = null;
 
-            if("prd".equals(this.targetActive)){
+            if(ACTIVE_PROFILE.equals(this.targetActive)){
                 requestString = LoggingUtil.makeLoggingRequestString(request, "INFO");
             }else{
                 requestMap = LoggingUtil.makeLoggingRequestMap(request, "DEBUG");
             }
-
             filterChain.doFilter(request, response);
-
             String responseString = "";
             Map<String, Object> responseMap = null;
             logMap.put("CONTENT-TYPE", request.getContentType() );
-            log.debug("### request.getContentType() ### :: {}", request.getContentType());
-
             if (request.getContentType() != null && request.getContentType().contains("application/json")) {
 
-                if("prd".equals(this.targetActive)){
+                if(ACTIVE_PROFILE.equals(this.targetActive)){
                     responseString = LoggingUtil.makeLoggingResponseString(response, "INFO");
                 }else{
                     responseMap = LoggingUtil.makeLoggingResponseMap(response, "DEBUG");
                 }
             }
-
-
             sw.stop();
-
             Long total = sw.getTotalTimeMillis();
-
-
-            if("prd".equals(this.targetActive)){
-
+            if(ACTIVE_PROFILE.equals(this.targetActive)){
                 logMap.put("TIME", total);
                 logMap.put("REQ", requestString);
                 logMap.put("RESP", responseString);
-//                log.info("TIME::::{}ms^REQ::::{}^REPS::::{}", new Object[] { total,  requestString, responseString });
+                log.info("active_profile::" + this.targetActive + " => " + new Gson().toJson(logMap));
             }else{
-
                 logMap.put("TIME", total);
                 logMap.put("REQ", requestMap);
                 logMap.put("RESP", responseMap);
-//                log.info("TIME::::{}ms^REQ::::{}^REPS::::{}", new Object[] { total, requestMap, responseMap });
+                log.info("active_profile::" + this.targetActive + " => " + new Gson().toJson(logMap));
             }
-            log.info(new Gson().toJson(logMap));
             ((ResponseWrapper) response).copyBodyToResponse();
         } catch (IOException e) {
             e.printStackTrace();

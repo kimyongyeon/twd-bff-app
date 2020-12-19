@@ -14,7 +14,7 @@ public class LoggingUtil {
     public static String makeLoggingRequestString(final HttpServletRequest request, String logLevel) throws IOException {
 
         // request info
-        StringBuffer requestInfos = new StringBuffer();
+        StringBuilder requestInfos = new StringBuilder();
 
         Calendar reqTime = Calendar.getInstance();
         String format_reqTime = format1.format(reqTime.getTime());
@@ -27,14 +27,13 @@ public class LoggingUtil {
         requestInfos.append("|reqTime=" + format_reqTime);
 
         if("DEBUG".equals(logLevel)){
-
             setReqHeaderAndBodyToStringBuffer(request, requestInfos);
         }
 
         return StringUtils.removeStart( requestInfos.toString() , "|");
     }
 
-    private static void setReqHeaderAndBodyToStringBuffer(HttpServletRequest request, StringBuffer requestInfos) throws IOException {
+    private static void setReqHeaderAndBodyToStringBuffer(HttpServletRequest request, StringBuilder requestInfos) throws IOException {
 
         requestInfos.append("|reqLogUrl=" + request.getRequestURL().toString());
 //        requestInfos.append("|reqLogServletPath=" + request.getServletPath());
@@ -79,9 +78,9 @@ public class LoggingUtil {
         requestMap.put("reqTime", format_reqTime);
 
         if("DEBUG".equals(logLevel)) {
-
             setReqHeaderAndBodyToMap(request, requestMap);
         }
+
         return requestMap;
     }
 
@@ -187,7 +186,6 @@ public class LoggingUtil {
             responseHeaderNameList.forEach(v -> responseHeaderMap.put(v, response.getHeader(v)));
             responseInfos.append("|respLogHeader=" + responseHeaderMap);
         }
-
 
         // response body
         try {
