@@ -51,6 +51,14 @@ public class SampleController {
                 .build();
     }
 
+    /**
+     * makingName
+     * @param mdn
+     * @param prodNo
+     * @param sampleVO
+     * @return
+     * @throws Exception
+     */
     @ApiOperation(value = "getNameMaking", notes = "sample getNameMaking 함수 입니다.", response = SampleVO.class)
     @GetMapping("/maskingName")
     public ApiMessageVO getNameMaking(

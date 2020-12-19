@@ -86,6 +86,30 @@ restBackendAPI.httpDel("/api/v1/sample/hello", new HashMap<>());
 
 ## 2. Fegin
 
+# 주석방법
+```
+1. 메서드 
+/**
+ * @title makingName
+ * @param mdn
+ * @param prodNo
+ * @param sampleVO
+ * @return
+ * @throws Exception
+ */
+
+2. 한줄 주석 
+int number = 0; // 초기화는 반드시 해야 합니다.
+
+3. 여러줄 주석 
+/*
+숫자를 뽑을때는 다음 함수를 사용해야 한다.
+이유는 중앙에서 Generator 하고 있다.
+*/
+int getNumber();
+
+```
+
 # 로깅
 `프로파일별로 처리 되어 있다.`
 
