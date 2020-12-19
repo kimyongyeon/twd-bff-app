@@ -48,7 +48,7 @@ hystrix:
             maxConcurrentRequests: 20   # Call thread에서 호출할 수 있는 HystrixCommand.getFallback()에 대한 요청의 최대 수
       circuitBreaker:
         requestVolumeThreshold: 2     #default:20       - Rolling Window 구간에 대한 request 처리 건수의 최소값. 이 값에 도달하기 전에 발생한 fail에 대해서는 circuit을 open 하지 않음
-#        errorThresholdPercentage: 50    #default:50       - 이 설정값 이상의 에러율이 발생하면 circuit을 쇼트시킴
+        errorThresholdPercentage: 50    #default:50       - 이 설정값 이상의 에러율이 발생하면 circuit을 쇼트시킴
         enabled: true
 #        sleepWindowInMilliseconds: 5000 #default:5000       - Circuit이 open 된 이후 다시 이 시간동안은 request를 거절한다. 이 설정 시간 이후의 request에 대해 circuit close 여부를 판단
 

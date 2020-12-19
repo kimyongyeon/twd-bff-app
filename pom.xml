@@ -83,6 +83,12 @@
             <version>1.6</version>
         </dependency>
 
+        <dependency>
+            <groupId>it.ozimov</groupId>
+            <artifactId>embedded-redis</artifactId>
+            <version>0.7.2</version>
+        </dependency>
+
         <!-- log용 -->
         <dependency>
             <groupId>com.google.code.gson</groupId>

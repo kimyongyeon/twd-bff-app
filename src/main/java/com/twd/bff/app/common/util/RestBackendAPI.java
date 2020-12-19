@@ -1,6 +1,7 @@
 package com.twd.bff.app.common.util;
 
 import com.twd.bff.app.common.vo.RestBackendApiHeadersVO;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -27,22 +28,24 @@ public class RestBackendAPI {
         }
         return restTemplate.exchange(builder.toUriString(), HttpMethod.GET, entity, Map.class);
     }
-    public ResponseEntity<?> httpPost(String url, Map<String, Object> Params) {
+    public ResponseEntity<?> httpPost(String url, Map<?, ?> Params) {
         HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity(Params, setHeader());
         return restTemplate.exchange(url, HttpMethod.POST, entity, Map.class);
     }
-    public ResponseEntity<?> httpDel(String url, Map Params) {
+    public ResponseEntity<?> httpDel(String url, Map<?, ?> Params) {
         HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity(Params, setHeader());
         return restTemplate.exchange(url, HttpMethod.DELETE, entity, Map.class);
     }
-    public ResponseEntity<?> httpPut(String url, Map Params) {
+    public ResponseEntity<?> httpPut(String url, Map<?, ?> Params) {
         HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity(Params, setHeader());
         return restTemplate.exchange(url, HttpMethod.PUT, entity, Map.class);
     }
 
     public HttpHeaders setHeader() {
         final HttpHeaders headers = new HttpHeaders();
-        headers.set(RestBackendApiHeadersVO.key, RestBackendApiHeadersVO.value);
+        if (StringUtils.isNotEmpty(RestBackendApiHeadersVO.key)) {
+            headers.set(RestBackendApiHeadersVO.key, RestBackendApiHeadersVO.value);
+        }
         return headers;
     }
 

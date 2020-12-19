@@ -8,6 +8,15 @@ git clone https://kimyongyeon@bitbucket.org/kimyongyeon/twd-bff-app.git
 - STS: https://spring.io/tools
 - visual studio code: https://code.visualstudio.com/download
 
+# 도움되는 사이트 
+- json editor: https://jsoneditoronline.org/#left=local.soyiro&right=local.fawige
+- thymeleaf: https://www.thymeleaf.org/
+- 변수명이름짓기: https://www.curioustore.com/#!/
+
+
+# frontend swagger-ui 
+- swagger-ui: http://localhost:10011/swagger-ui.html
+
 # 프로젝트 최초 구성시
 ## 개발환경
 - https://adoptopenjdk.net/?variant=openjdk15&jvmVariant=hotspot
@@ -133,12 +142,13 @@ int getNumber();
 - application-local: 로컬에서 본인만 특별하게 설정하여 처리해야 할때 사용.
 - application-prd: 운영환경으로 설정해야 하는 정보를 입력하여 사용해야 할때 사용.
 
-# 서킷브레이크 설정 설명
-- coreSize: 100 `default:10     - 코어(기본) thread pool 크기`
-- maximumSize: 500 `default:15     - 최대 thread pool 크기. allowMaximumSizeToDivergeFromCoreSize 값이 true여야 유효하다.`
-- timeoutInMilliseconds: 3000 `default:300ms  - Thread 사용시 - Command 쓰레드를 호출한 Caller 입장에서의 타임아웃 값`
+# CircuitBreaker(회복탄력성) 설정 설명
+- coreSize: 100 `default:10 - 코어(기본) thread pool 크기`
+- maximumSize: 500 `default:15 - 최대 thread pool 크기. allowMaximumSizeToDivergeFromCoreSize 값이 true여야 유효하다.`
+- timeoutInMilliseconds: 3000 `default:300ms - Thread 사용시 - Command 쓰레드를 호출한 Caller 입장에서의 타임아웃 값`
 - maxConcurrentRequests: 20 `Call thread에서 호출할 수 있는 HystrixCommand.getFallback()에 대한 요청의 최대 수`
 - requestVolumeThreshold: 2 `Rolling Window 구간에 대한 request 처리 건수의 최소값. 이 값에 도달하기 전에 발생한 fail에 대해서는 circuit을 open 하지 않음`
+- errorThresholdPercentage: 50    `default:50 - 이 설정값 이상의 에러율이 발생하면 circuit을 쇼트시킴`
 
 # 패키지 구조 
 - com.twd.bff: root 패키지
@@ -167,6 +177,10 @@ int getNumber();
 - 집킨, 슬루스 서버 나오면 연결
 - 레디스 연동 
 - block 패키지 관련해서 빠진 패키지들이 있어 일단 주서처리 하였음.
+
+# Redis Cacheable 설정
+- 기본설정: 1분
+- 객체: 자유롭게 설정
 
 # 유틸
 ## 마스킹 사용예시

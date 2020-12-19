@@ -25,7 +25,6 @@ spring:
         max-wait: -1ms
         min-idle: 0
       shutdown-timeout: 100ms
-    port: 6379
     sleuth:
       sampler:
         probability: 0.1

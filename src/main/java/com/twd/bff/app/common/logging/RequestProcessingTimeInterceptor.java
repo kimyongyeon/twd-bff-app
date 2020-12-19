@@ -33,7 +33,7 @@ public class RequestProcessingTimeInterceptor implements HandlerInterceptor {
         // 정적 리소드들(css, js,...)은 modelAndView가 null
 
         // todo: 지연테스트용 지워야 함.
-        for(long i=0; i<10_000_000_000L; i++) {}
+//        for(long i=0; i<10_000_000_000L; i++) {}
 
         if (modelAndView != null) {
             // modelAndView를 통해 view에 전달할 자료의 수정 가능

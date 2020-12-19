@@ -18,29 +18,29 @@ public class CommonExceptionHandler {
     public ResponseEntity<?> unknowError(Exception e) {
         log.error(this.getClass().getName(), e);
         return new ResponseEntity<ApiMessageVO>(ApiMessageVO.builder()
-                .respCode("502")
-                .resMsg(e.getClass().getName() + " : " + e.getMessage()).build(), HttpStatus.BAD_GATEWAY);
+                .respCode("BIZ_001")
+                .resMsg("서버 문의 바랍니다.").build(), HttpStatus.BAD_GATEWAY);
     }
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<?> unknowError(RuntimeException e) {
         log.error(this.getClass().getName(), e);
         return new ResponseEntity<ApiMessageVO>(ApiMessageVO.builder()
-                .respCode("500")
-                .resMsg(e.getClass().getName() + " : " + e.getMessage()).build(), HttpStatus.BAD_GATEWAY);
+                .respCode("BIZ_002")
+                .resMsg("서버 문의 바랍니다.").build(), HttpStatus.BAD_GATEWAY);
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public ResponseEntity<?> requiredParamError(MissingServletRequestParameterException e) {
         return new ResponseEntity<ApiMessageVO>(ApiMessageVO.builder()
-                .respCode("500")
+                .respCode("BIZ_003")
                 .resMsg("Required value is missing.").build(), HttpStatus.BAD_GATEWAY);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> invalidParamError(MethodArgumentNotValidException e) {
         return new ResponseEntity<ApiMessageVO>(ApiMessageVO.builder()
-                .respCode("500")
+                .respCode("BIZ_004")
                 .resMsg("The request parameter is invalid.").build(), HttpStatus.BAD_GATEWAY);
     }
 
@@ -49,7 +49,7 @@ public class CommonExceptionHandler {
         String firstMsg = e.getBindingResult().getAllErrors().get(0).getCodes()[0];
 //        String firstMsg = e.getBindingResult().getAllErrors().get(0).getDefaultMessage();
         return new ResponseEntity<ApiMessageVO>(ApiMessageVO.builder()
-                .respCode("500")
+                .respCode("BIZ_005")
                 .resMsg("The request parameter is invalid.[" + firstMsg + "]").build(), HttpStatus.BAD_GATEWAY);
     }
 }
