@@ -1,4 +1,4 @@
-package com.twd.bff.app.biz.feign;
+package com.twd.bff.app.biz.v1.sample.feign;
 
 import com.twd.bff.app.config.FeignRetryConfiguration;
 import feign.Headers;

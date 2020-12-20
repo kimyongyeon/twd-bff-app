@@ -1,7 +1,7 @@
-package com.twd.bff.app.biz.controller;
+package com.twd.bff.app.biz.v1.sample.controller;
 
-import com.twd.bff.app.biz.service.SampleService;
-import com.twd.bff.app.biz.vo.SampleVO;
+import com.twd.bff.app.biz.v1.sample.service.SampleService;
+import com.twd.bff.app.biz.v1.sample.vo.SampleVO;
 import com.twd.bff.app.common.constant.CommonConstant;
 import com.twd.bff.app.common.util.masking.MaskingHelper;
 import com.twd.bff.app.common.util.masking.MaskingTypeEnum;
@@ -13,8 +13,11 @@ import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Profile;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -79,7 +82,7 @@ public class SampleController {
 
 
     @ApiOperation(value = "hello", notes = "sample hello 함수 입니다.")
-    @GetMapping("/hello")
+    @GetMapping(value = "/hello")
     public ApiMessageVO hello() {
         return ApiMessageVO.builder()
                 .resMsg(OK_RESP_MSG)
@@ -89,11 +92,18 @@ public class SampleController {
     }
 
     @ApiOperation(value = "helloPost", notes = "sample helloPost 함수 입니다.")
-    @RequestMapping("/helloPost")
-    public ApiMessageVO helloPost(@RequestBody SampleVO sampleVO) {
+    @RequestMapping(value = "helloPost"
+            , method = {RequestMethod.POST, RequestMethod.DELETE, RequestMethod.PUT}
+            /* 요청 페이로드 타입 제한하기, 요청 헤더에 반드시 application/json 이 존재해야한다. */
+            , consumes = MediaType.APPLICATION_JSON_VALUE
+            /* 응답 데이터 제한하기 */
+            , produces = MediaType.APPLICATION_JSON_VALUE
+            /* AUTHORIZATION 헤더값이 admin 일때만 응답을 받겠다는 것 */
+            , headers = {HttpHeaders.AUTHORIZATION + "=" + "admin"} )
+    public ApiMessageVO helloPost(@Valid @RequestBody SampleVO sampleVO, @RequestParam String name) {
         return ApiMessageVO.builder()
                 .resMsg(OK_RESP_MSG)
-                .respBody(sampleVO.toString())
+                .respBody(name + ":" + sampleVO.toString())
                 .respCode(OK_RESP_CODE)
                 .build();
     }

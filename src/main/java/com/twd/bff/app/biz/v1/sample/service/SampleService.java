@@ -1,9 +1,7 @@
-package com.twd.bff.app.biz.service;
+package com.twd.bff.app.biz.v1.sample.service;
 
-import com.google.gson.Gson;
-import com.twd.bff.app.biz.feign.SampleFeign;
+import com.twd.bff.app.biz.v1.sample.feign.SampleFeign;
 import com.twd.bff.app.common.util.RestBackendAPI;
-import com.twd.bff.app.common.vo.ApiMessageVO;
 import com.twd.bff.app.common.vo.RestBackendApiHeadersVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,9 +1,8 @@
 package com.twd.bff.app;
 
 import com.google.gson.Gson;
-import com.twd.bff.app.biz.controller.SampleController;
-import com.twd.bff.app.biz.feign.SampleFeign;
-import com.twd.bff.app.biz.vo.SampleVO;
+import com.twd.bff.app.biz.v1.sample.controller.SampleController;
+import com.twd.bff.app.biz.v1.sample.vo.SampleVO;
 import com.twd.bff.app.common.vo.ApiMessageVO;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;

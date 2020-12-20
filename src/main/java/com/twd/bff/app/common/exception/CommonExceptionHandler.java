@@ -8,10 +8,14 @@ import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Slf4j
 @ControllerAdvice
@@ -30,7 +34,6 @@ public class CommonExceptionHandler {
         return new ResponseEntity<ApiMessageVO>(ApiMessageVO.builder()
                 .respCode("BIZ_001")
                 .respBody(respBody)
-                .respBody(e.getMessage())
                 .resMsg("일반 오류 입니다.[자세한 내용은 서버에 문의 주세요.]").build(), HttpStatus.BAD_GATEWAY);
     }
 
@@ -56,20 +59,22 @@ public class CommonExceptionHandler {
         return new ResponseEntity<ApiMessageVO>(ApiMessageVO.builder()
                 .respCode("BIZ_003")
                 .respBody(respBody)
-                .respBody(e.getMessage())
                 .resMsg("필수 파라미터 오류 입니다.[자세한 내용은 서버에 문의 주세요]").build(), HttpStatus.BAD_GATEWAY);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> invalidParamError(MethodArgumentNotValidException e) {
-        String respBody = "";
+        StringBuilder respBody = new StringBuilder();
         if (getProfile()) {
-            respBody = e.getMessage();
+            e.getBindingResult().getAllErrors().forEach((error) -> {
+                String fieldName = ((FieldError) error).getField();
+                String errorMessage = error.getDefaultMessage();
+                respBody.append("{" + fieldName + "} " + errorMessage);
+            });
         }
         return new ResponseEntity<ApiMessageVO>(ApiMessageVO.builder()
                 .respCode("BIZ_004")
-                .respBody(respBody)
-                .respBody(e.getMessage())
+                .respBody(respBody.toString())
                 .resMsg("파라미터 유효성 오류 입니다.[자세한 내용은 서버에 문의 주세요]").build(), HttpStatus.BAD_GATEWAY);
     }
 
