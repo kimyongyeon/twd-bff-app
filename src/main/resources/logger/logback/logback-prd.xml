@@ -142,7 +142,7 @@
     </logger>
 
 
-    <logger name="com.twd.bff" level="INFO" additivity="false">
+    <logger name="kr.co.tworld.shop.my" level="INFO" additivity="false">
         <appender-ref ref="CONSOLE" />
         <appender-ref ref="FILELOG_BASE"/>
         <!--<appender-ref ref="ELASTIC" />--> <!-- 앞에서 지정한 ES appender 로 보낸다. -->

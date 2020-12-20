@@ -1,6 +1,180 @@
-# 원본코드 주소 
+# 원본소스 주소 
 ```
 git clone https://kimyongyeon@bitbucket.org/kimyongyeon/twd-bff-app.git
+```
+
+# Controller 템플릿 
+```
+@Profile(value = {"local", "default"})
+@RequestMapping("/api/v1/sample")
+@RestController
+@Api(value="SampleController", tags = "샘플 테스트 APIs") // API 스펙 설정 정의
+public class SampleController {
+
+    @Autowired
+    SampleService sampleService;
+
+    // GET - 기본 
+    @ApiOperation(value = "get", notes = "sample get 함수 입니다.") // API 메서드 제목,설명 정의
+    @ApiImplicitParams({ // API 메서드 파라미터 상세설명, GET 메서드에서만 사용 
+            @ApiImplicitParam(name = "name", value="이름", dataType = "String", paramType="query"),
+    })
+    @GetMapping(value = "/get" /* URL 주소 */ 
+        , consumes = MediaType.APPLICATION_JSON_VALUE /* 요청 페이로드 타입 제한하기 */ 
+        , produces = MediaType.APPLICATION_JSON_VALUE /* 응답 데이터 제한하기 */ )
+    public ApiMessageVO get(String name) {
+        Map map = new HashMap();
+        map.put("name", name);
+        return ApiMessageVO.builder()
+                .resMsg(OK_RESP_MSG)
+                .respBody(sampleService.get(map))
+                .respCode(OK_RESP_CODE)
+                .build();
+    }
+    
+    // GET - Header로 값을 받는 경우 
+    @ApiOperation(value = "getNameMaking", notes = "sample getNameMaking 함수 입니다.", response = SampleVO.class)
+    @GetMapping("/maskingName")
+    public ApiMessageVO getNameMaking(
+            @RequestHeader(value="mdn") String mdn,
+            @RequestHeader(value="prodNo") String prodNo,
+            @ApiParam(value = "SampleVO 파라미터", required = true) SampleVO sampleVO) throws Exception {
+    
+        MaskingHelper.init(CommonConstant.LANG_CD);
+        String nameType = MaskingTypeEnum.MaskName.getCode();
+        String nameMaskingStr = MaskingHelper.maskString(nameType, sampleVO.getName());
+    
+        return ApiMessageVO.builder()
+                .resMsg(OK_RESP_MSG)
+                .respBody(SampleVO.builder().name(nameMaskingStr).build())
+                .respCode(OK_RESP_CODE)
+                .build();
+    }
+    
+    // POST
+    @ApiOperation(value = "post", notes = "sample post 함수 입니다.", response = SampleVO.class)
+    @PostMapping(name = "/post")
+    public ApiMessageVO post(@RequestBody SampleVO sampleVO) {
+        Map map = new HashMap();
+        map.put("prodId", sampleVO.getName() + "::post");
+        map.put("mdn", sampleVO.getTel());
+        return ApiMessageVO.builder()
+                .resMsg(OK_RESP_MSG)
+                .respBody(sampleService.post(map))
+                .respCode(OK_RESP_CODE)
+                .build();
+    }
+
+    // PUT
+    @ApiOperation(value = "put", notes = "sample put 함수 입니다.", response = SampleVO.class)
+    @PutMapping(name = "/put")
+    public ApiMessageVO put(@RequestBody SampleVO sampleVO) {
+        Map map = new HashMap();
+        map.put("prodId", sampleVO.getName() + "::put");
+        map.put("mdn", sampleVO.getTel());
+        return ApiMessageVO.builder()
+                .resMsg(OK_RESP_MSG)
+                .respBody(sampleService.put(map))
+                .respCode(OK_RESP_CODE)
+                .build();
+    }
+    
+    // Cache 키 저장  
+    @Cacheable(value = CacheKey.SAMPLE, unless = "#result == null", cacheManager = "cacheManager")
+    @ApiOperation(value = "getNameMaking", notes = "sample getNameMaking 함수 입니다.", response = SampleVO.class)
+    @GetMapping("/maskingName")
+    public ApiMessageVO getNameMaking(
+            @RequestHeader(value="mdn") String mdn,
+            @RequestHeader(value="prodNo") String prodNo,
+            @ApiParam(value = "SampleVO 파라미터", required = true) SampleVO sampleVO) throws Exception {
+
+        MaskingHelper.init(CommonConstant.LANG_CD);
+        String nameType = MaskingTypeEnum.MaskName.getCode();
+        String nameMaskingStr = MaskingHelper.maskString(nameType, sampleVO.getName());
+
+        return ApiMessageVO.builder()
+                .resMsg(OK_RESP_MSG)
+                .respBody(SampleVO.builder().name(nameMaskingStr).build())
+                .respCode(OK_RESP_CODE)
+                .build();
+    }
+    
+    // Cache 키 삭제 
+    @CacheEvict(value = CacheKey.SAMPLE)
+    @ApiOperation(value = "del", notes = "sample del 함수 입니다.", response = SampleVO.class)
+    @DeleteMapping(name = "/del")
+    public ApiMessageVO del(@RequestBody SampleVO sampleVO) {
+        Map map = new HashMap();
+        map.put("prodId", sampleVO.getName() + "::del");
+        map.put("mdn", sampleVO.getTel());
+        return ApiMessageVO.builder()
+                .resMsg(OK_RESP_MSG)
+                .respBody(sampleService.del(map))
+                .respCode(OK_RESP_CODE)
+                .build();
+    }
+}
+``` 
+
+# Service 탬플릿
+```
+public interface SampleService {
+
+    String get(Map param); // GET 메서드 샘플
+    String post(Map param); // POST 메서드 샘플 
+    String del(Map param); // DELETE 메서드 샘플
+    String put(Map param); // PUT 메서드  샘플
+
+    String hello(String name); // Feign 메서드 샘플
+
+    @Service
+    @Slf4j
+    class SampleServiceImpl implements SampleService {
+
+        @Autowired
+        RestBackendAPI restBackendAPI;
+
+        @Autowired
+        SampleFeign sampleFeign;
+
+        public String hello(String name) {
+            return sampleFeign.hello(name);
+        }
+
+        @Override
+        public String get(Map param) {
+            RestBackendApiHeadersVO.url = "http://localhost:10011/api/v1/sample/hello";
+            RestBackendApiHeadersVO.key = "test";
+            RestBackendApiHeadersVO.value = "test12345";
+            ResponseEntity<?> responseEntity = restBackendAPI.httpGet(RestBackendApiHeadersVO.url, param);
+            log.debug("respBody: " + responseEntity.getBody());
+            Map resultMap = (Map) responseEntity.getBody();
+            return resultMap.get("respBody").toString();
+        }
+
+        @Override
+        public String post(Map param) {
+            RestBackendApiHeadersVO.url = "http://localhost:10011/api/v1/sample/helloPost";
+            HttpEntity<?> httpEntity = restBackendAPI.httpPost(RestBackendApiHeadersVO.url, param);
+            return httpEntity.toString();
+        }
+
+        @Override
+        public String del(Map param) {
+            RestBackendApiHeadersVO.url = "http://localhost:10011/api/v1/sample/helloPost";
+            HttpEntity<?> httpEntity = restBackendAPI.httpDel(RestBackendApiHeadersVO.url, param);
+            return httpEntity.getBody().toString();
+        }
+
+        @Override
+        public String put(Map param) {
+            RestBackendApiHeadersVO.url = "http://localhost:10011/api/v1/sample/helloPost";
+            HttpEntity<?> httpEntity = restBackendAPI.httpPut(RestBackendApiHeadersVO.url, param);
+            return httpEntity.toString();
+        }
+    }
+}
+
 ```
 
 # 권장 툴
@@ -15,13 +189,17 @@ git clone https://kimyongyeon@bitbucket.org/kimyongyeon/twd-bff-app.git
 
 
 # frontend swagger-ui 
-- swagger-ui: http://localhost:10011/swagger-ui.html
+http://localhost:10011/swagger-ui.html
+
+# block-url
+http://localhost:10011/block/hidden-key
 
 # 프로젝트 최초 구성시
 ## 개발환경
 - https://adoptopenjdk.net/?variant=openjdk15&jvmVariant=hotspot
 - JDK: openJDK8
 - JVM: OpenJ9
+- lombok
  
 ## application.yml 제목, 타이틀 변경
 ```
@@ -44,7 +222,7 @@ spring:
 groupId, artifactId, name, description 내용을 컴포넌트 특징에 맞게 변경 
 
 ```
-<groupId>com.twd.bff.app</groupId> 
+<groupId>kr.co.tworld.shop.my</groupId> 
 <artifactId>twd-bff-app</artifactId>
 <name>twd-bff-app</name>
 <description>Tworld Direct Backend Front App</description>
@@ -151,10 +329,10 @@ int getNumber();
 - errorThresholdPercentage: 50    `default:50 - 이 설정값 이상의 에러율이 발생하면 circuit을 쇼트시킴`
 
 # 패키지 구조 
-- com.twd.bff: root 패키지
-- com.twd.bff.biz: 업무 컴포넌트 패키지
-- com.twd.bff.common: 공통 컴포넌트 패키지
-- com.twd.bff.config: 공통 설정 패키지 
+- kr.co.tworld.shop.my: root 패키지
+- kr.co.tworld.shop.my.biz: 업무 컴포넌트 패키지
+- kr.co.tworld.shop.my.common: 공통 컴포넌트 패키지
+- kr.co.tworld.shop.my.config: 공통 설정 패키지 
 
 # 공통 설정 설명
 - MvcConfiguration: MVC 모델 관련 설정 정보 
@@ -288,6 +466,7 @@ mvn clean package -Plocal
 
 # 폴더구조
 ```
+
 F:.
 ├─src
 │  ├─main
@@ -297,18 +476,24 @@ F:.
 │  │  │          └─bff
 │  │  │              └─app
 │  │  │                  ├─biz
-│  │  │                  │  ├─controller
-│  │  │                  │  ├─feign
-│  │  │                  │  ├─service
-│  │  │                  │  └─vo
+│  │  │                  │  └─v1
+│  │  │                  │      └─sample
+│  │  │                  │          ├─controller
+│  │  │                  │          ├─feign
+│  │  │                  │          ├─service
+│  │  │                  │          └─vo
 │  │  │                  ├─common
+│  │  │                  │  ├─block
 │  │  │                  │  ├─constant
 │  │  │                  │  ├─exception
 │  │  │                  │  ├─logging
 │  │  │                  │  ├─util
+│  │  │                  │  │  └─masking
 │  │  │                  │  └─vo
 │  │  │                  └─config
+│  │  │                      └─redis
 │  │  └─resources
+│  │      ├─encryption
 │  │      ├─logger
 │  │      │  └─logback
 │  │      ├─static
