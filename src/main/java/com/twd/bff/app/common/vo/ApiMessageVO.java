@@ -11,7 +11,7 @@ import java.io.Serializable;
 @Data
 @Builder
 public class ApiMessageVO<T> implements Serializable {
-    @ApiModelProperty(position = 1, value = "응답코드", example = "200", required = true)
+    @ApiModelProperty(position = 1, value = "응답코드", example = "00", required = true)
     private String respCode;
     @ApiModelProperty(position = 2, value = "응답메시지", example = "성공 입니다.", required = true)
     private String resMsg;
