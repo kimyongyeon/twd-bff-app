@@ -1,4 +1,4 @@
-package com.twd.bff.app.common.block;
+package com.twd.bff.app.common.block.model;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,9 +8,9 @@ import lombok.ToString;
 /**
 * <pre> 
 * DV-18년-TworldDirect-구조개선
-* 1.클래스명 : UrlBlockPassKey.java
-* 2.작성일 : 2019. 07. 19.
-* 3.작성자 : P028874
+* 1.클래스명 : UrlBlockPassId.java
+* 2.작성일 : 2018. 12. 11.
+* 3.작성자 : P128161
 * 4.설명 :
 * </pre>
 */
@@ -18,7 +18,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @NoArgsConstructor
-public class UrlBlockPassKey {
+public class UrlBlockPassId {
 
 	/** 차단CODE */
 	private String blCode;
@@ -29,7 +29,7 @@ public class UrlBlockPassKey {
 	/** W:온라인,M:모바일 */
 	private String blChannel;
 
-	/** 차단URL = 차단 Key*/
+	/** 차단URL */
 	private String blUrl;
 
 	/** 안내화면URL */

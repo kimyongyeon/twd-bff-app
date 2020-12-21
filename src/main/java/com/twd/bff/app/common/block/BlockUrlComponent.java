@@ -1,5 +1,14 @@
 package com.twd.bff.app.common.block;
 
+import com.twd.bff.app.common.block.cache.CacheConstants;
+import com.twd.bff.app.common.block.cache.CacheUtils;
+import com.twd.bff.app.common.block.exceptions.BizException;
+import com.twd.bff.app.common.block.exceptions.error.CommonError;
+import com.twd.bff.app.common.block.model.UrlBlockMeta;
+import com.twd.bff.app.common.block.model.UrlBlockPassId;
+import com.twd.bff.app.common.block.model.UrlBlockPassKey;
+import com.twd.bff.app.common.block.session.SessionUtil;
+import com.twd.bff.app.common.block.session.UserSession;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,25 +94,25 @@ public class BlockUrlComponent {
 	 * </ul>
 	 */
 	private boolean isPassId(HttpSession session) {
-//		UrlBlockPassId urlBlockPassId = blockUrlRedisDao.getUrlBlockPassId();
-//		if (Objects.nonNull(urlBlockPassId)) {
-//
-//			String passIds = urlBlockPassId.getBlUrl();
-//			if (StringUtils.isNotEmpty(passIds)) {
-//
-//				List passIdList = Arrays.asList(passIds.split(";"));
-//				if (! CollectionUtils.isEmpty(passIdList)) {
-//
-//					if (Objects.nonNull(session)) {
-//						UserSession userSession = SessionUtil.getUser(session);
-//
-//						if (Objects.nonNull(userSession)) {
-//							return passIdList.stream().anyMatch(passId -> passId.equals(userSession.getLoginId()));
-//						}
-//					}
-//				}
-//			}
-//		}
+		UrlBlockPassId urlBlockPassId = blockUrlRedisDao.getUrlBlockPassId();
+		if (Objects.nonNull(urlBlockPassId)) {
+
+			String passIds = urlBlockPassId.getBlUrl();
+			if (StringUtils.isNotEmpty(passIds)) {
+
+				List passIdList = Arrays.asList(passIds.split(";"));
+				if (! CollectionUtils.isEmpty(passIdList)) {
+
+					if (Objects.nonNull(session)) {
+						UserSession userSession = SessionUtil.getUser(session);
+
+						if (Objects.nonNull(userSession)) {
+							return passIdList.stream().anyMatch(passId -> passId.equals(userSession.getLoginId()));
+						}
+					}
+				}
+			}
+		}
 
 		return false;
 	}
@@ -180,71 +189,71 @@ public class BlockUrlComponent {
 	 * </ul>
 	 */
 	private String checkUrlBlockMeta(String url, UrlBlockMeta urlBlockMeta, String startDtm, String endDtm, Map<String,String[]> parameterMap) {
-//		String blockedUrl = urlBlockMeta.getBlUrl();
-//		if (StringUtils.isNotEmpty(startDtm) && StringUtils.isNotEmpty(endDtm)) {
-//			long nowDate = Long.parseLong(getCurrentTime());
-//			long startBlockTime = Long.parseLong(startDtm);
-//			long endBlockTime = Long.parseLong(endDtm);
-//			boolean checkTime = (startBlockTime <= nowDate && endBlockTime > nowDate);
-//
-//			boolean checkUrl;
-//			if ("GR".equals(urlBlockMeta.getBlType())) {  // 그룹 URL차단
-//				checkUrl = Arrays.asList(blockedUrl.split(";")).stream().anyMatch(blockUrl -> blockUrl.equals(url));
-//			} else {
-//				checkUrl = url.equals(blockedUrl) ;
-//			}
-//
-//			if( "*".equals(blockedUrl) && !"/error".equals(url) && !"/block/hidden-key".equals(url)) {
-//				checkUrl = true;
-//			}
-//
-//			boolean isBlock = checkUrl && checkTime;
-//			if (isBlock) {
-//				if ("Y".equals(urlBlockMeta.getParamYn())) { // 파라미터 차단여부
-//					if (!isBlockedParameterValue(urlBlockMeta.getParamName(), urlBlockMeta.getParamValue(), parameterMap)) {
-//						return null;
-//					}
-//				}
-//				// 예외처리 URL 여부
-//				if("GR".equals(urlBlockMeta.getBlType()) && urlBlockMeta.getNblUrl() != null){
-//					log.debug("request URL : {}", url);
-//					// 예외처리 URL 체크.
-//					if(Arrays.asList(urlBlockMeta.getNblUrl().split(";")).stream().anyMatch(nblockUrl -> nblockUrl.equals(url))) {
-//						return null;
-//					}
-//					// 예외처리 URL 패턴 체크 ex) /dsds/**
-//					if(Arrays.asList(urlBlockMeta.getNblUrl().split(";")).stream().filter(nblockUrl -> nblockUrl.contains("*") == true).anyMatch(nblockUrl -> checkUrlPattern(nblockUrl, url))){
-//						return null;
-//					}
-//				}
-//
-//				log.debug("진입URL [{}] : 금일차단, Type : {}, {}~{}", url, urlBlockMeta.getBlType(), startDtm, endDtm);
-//				if (StringUtils.isNotEmpty(urlBlockMeta.getGuideUrl())) {
-//					return urlBlockMeta.getGuideUrl();
-//				}
-//
-//				if (StringUtils.isNotEmpty(startDtm) && StringUtils.isNotEmpty(endDtm)
-//					&& startDtm.length() == 12 && endDtm.length() == 12) {
-//					String[] args = {
-//						  startDtm.substring(4, 6).replaceFirst("^0+(?!$)", "") // 차단시작 월(앞자리 0제거)
-//						, startDtm.substring(6, 8).replaceFirst("^0+(?!$)", "") // 차단시작 일(앞자리 0제거)
-//						, startDtm.substring(8, 10), startDtm.substring(10, 12) // 차단시작 시, 분
-//						, endDtm.substring(4, 6).replaceFirst("^0+(?!$)", "")   // 차단종료 월(앞자리 0제거)
-//						, endDtm.substring(6, 8).replaceFirst("^0+(?!$)", "")   // 차단종료 일(앞자리 0제거)
-//						, endDtm.substring(8, 10), endDtm.substring(10, 12)     // 차단종료 시, 분
-//					};
-//					if(checkUrlPattern("/dsds/**", url)) {
-//						throw new BizException(CommonError.BLOCKED_URL_TIME_DSDS, args);
-//					} else if("*".equals(blockedUrl)){
-//						throw new BizException(CommonError.BLOCKED_URL_TIME_ALL, args);
-//					} else {
-//						throw new BizException(CommonError.BLOCKED_URL_TIME_ERROR, args);
-//					}
-//				} else {
-//					throw new BizException(CommonError.BLOCKED_URL_ERROR);
-//				}
-//			}
-//		}
+		String blockedUrl = urlBlockMeta.getBlUrl();
+		if (StringUtils.isNotEmpty(startDtm) && StringUtils.isNotEmpty(endDtm)) {
+			long nowDate = Long.parseLong(getCurrentTime());
+			long startBlockTime = Long.parseLong(startDtm);
+			long endBlockTime = Long.parseLong(endDtm);
+			boolean checkTime = (startBlockTime <= nowDate && endBlockTime > nowDate);
+
+			boolean checkUrl;
+			if ("GR".equals(urlBlockMeta.getBlType())) {  // 그룹 URL차단
+				checkUrl = Arrays.asList(blockedUrl.split(";")).stream().anyMatch(blockUrl -> blockUrl.equals(url));
+			} else {
+				checkUrl = url.equals(blockedUrl) ;
+			}
+
+			if( "*".equals(blockedUrl) && !"/error".equals(url) && !"/block/hidden-key".equals(url)) {
+				checkUrl = true;
+			}
+
+			boolean isBlock = checkUrl && checkTime;
+			if (isBlock) {
+				if ("Y".equals(urlBlockMeta.getParamYn())) { // 파라미터 차단여부
+					if (!isBlockedParameterValue(urlBlockMeta.getParamName(), urlBlockMeta.getParamValue(), parameterMap)) {
+						return null;
+					}
+				}
+				// 예외처리 URL 여부
+				if("GR".equals(urlBlockMeta.getBlType()) && urlBlockMeta.getNblUrl() != null){
+					log.debug("request URL : {}", url);
+					// 예외처리 URL 체크.
+					if(Arrays.asList(urlBlockMeta.getNblUrl().split(";")).stream().anyMatch(nblockUrl -> nblockUrl.equals(url))) {
+						return null;
+					}
+					// 예외처리 URL 패턴 체크 ex) /dsds/**
+					if(Arrays.asList(urlBlockMeta.getNblUrl().split(";")).stream().filter(nblockUrl -> nblockUrl.contains("*") == true).anyMatch(nblockUrl -> checkUrlPattern(nblockUrl, url))){
+						return null;
+					}
+				}
+
+				log.debug("진입URL [{}] : 금일차단, Type : {}, {}~{}", url, urlBlockMeta.getBlType(), startDtm, endDtm);
+				if (StringUtils.isNotEmpty(urlBlockMeta.getGuideUrl())) {
+					return urlBlockMeta.getGuideUrl();
+				}
+
+				if (StringUtils.isNotEmpty(startDtm) && StringUtils.isNotEmpty(endDtm)
+					&& startDtm.length() == 12 && endDtm.length() == 12) {
+					String[] args = {
+						  startDtm.substring(4, 6).replaceFirst("^0+(?!$)", "") // 차단시작 월(앞자리 0제거)
+						, startDtm.substring(6, 8).replaceFirst("^0+(?!$)", "") // 차단시작 일(앞자리 0제거)
+						, startDtm.substring(8, 10), startDtm.substring(10, 12) // 차단시작 시, 분
+						, endDtm.substring(4, 6).replaceFirst("^0+(?!$)", "")   // 차단종료 월(앞자리 0제거)
+						, endDtm.substring(6, 8).replaceFirst("^0+(?!$)", "")   // 차단종료 일(앞자리 0제거)
+						, endDtm.substring(8, 10), endDtm.substring(10, 12)     // 차단종료 시, 분
+					};
+					if(checkUrlPattern("/dsds/**", url)) {
+						throw new BizException(CommonError.BLOCKED_URL_TIME_DSDS, args);
+					} else if("*".equals(blockedUrl)){
+						throw new BizException(CommonError.BLOCKED_URL_TIME_ALL, args);
+					} else {
+						throw new BizException(CommonError.BLOCKED_URL_TIME_ERROR, args);
+					}
+				} else {
+					throw new BizException(CommonError.BLOCKED_URL_ERROR);
+				}
+			}
+		}
 
 		return null;
 	}
@@ -296,14 +305,12 @@ public class BlockUrlComponent {
 		 * </ul>
 		 */
 		public List<String> getUrlBlockCodeList() {
-//			String urlBlockCodes = CacheUtils.getCacheData(REDIS_CACHE.UrlBlockMeta + META_SUBKEY_BLOCK_M_BLCODE, FIELD_ID_URL_BLOCK_CODE, String.class);
-//			if (StringUtils.isNotEmpty(urlBlockCodes)) {
-//				return Arrays.asList(urlBlockCodes.split(";"));
-//			} else {
-//				return null;
-//			}
-			// todo: 패키지를 찾아서 넣고 주석을 풀어주세요.
-			return null;
+			String urlBlockCodes = CacheUtils.getCacheData(CacheConstants.REDIS_CACHE.UrlBlockMeta + META_SUBKEY_BLOCK_M_BLCODE, FIELD_ID_URL_BLOCK_CODE, String.class);
+			if (StringUtils.isNotEmpty(urlBlockCodes)) {
+				return Arrays.asList(urlBlockCodes.split(";"));
+			} else {
+				return null;
+			}
 		}
 
 		/**
@@ -340,9 +347,7 @@ public class BlockUrlComponent {
 		 * </ul>
 		 */
 		public UrlBlockPassId getUrlBlockPassId() {
-//			return CacheUtils.getCacheData(REDIS_CACHE.UrlBlockMeta + META_SUBKEY_BLOCK_PASS_ID, FIELD_ID_BLOCK_INFO, UrlBlockPassId.class);
-			// todo: 패키지를 찾아서 넣고 주석을 풀어주세요.
-			return null;
+			return CacheUtils.getCacheData(CacheConstants.REDIS_CACHE.UrlBlockMeta + META_SUBKEY_BLOCK_PASS_ID, FIELD_ID_BLOCK_INFO, UrlBlockPassId.class);
 		}
 
 		/**
@@ -359,9 +364,7 @@ public class BlockUrlComponent {
 		 * </ul>
 		 */
 		public UrlBlockPassKey getUrlBlockPassKey() {
-//			return CacheUtils.getCacheData(REDIS_CACHE.UrlBlockMeta + META_SUBKEY_BLOCK_PASS_KEY, FIELD_ID_BLOCK_INFO, UrlBlockPassKey.class);
-			// todo: 패키지를 찾아서 넣고 주석을 풀어주세요.
-			return null;
+			return CacheUtils.getCacheData(CacheConstants.REDIS_CACHE.UrlBlockMeta + META_SUBKEY_BLOCK_PASS_KEY, FIELD_ID_BLOCK_INFO, UrlBlockPassKey.class);
 		}
 	}
 }

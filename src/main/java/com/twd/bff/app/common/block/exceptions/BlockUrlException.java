@@ -1,4 +1,6 @@
-package com.twd.bff.app.common.block;
+package com.twd.bff.app.common.block.exceptions;
+
+import com.twd.bff.app.common.block.exceptions.BaseException;
 
 public class BlockUrlException extends BaseException {
 

@@ -24,8 +24,8 @@ public class RedisEmbeddedRepositoryConfig {
         return new LettuceConnectionFactory(redisHost, redisPort);
     }
 
-    @Bean
-    public RedisTemplate<?, ?> redisTemplate() {
+    @Bean(name = "redisEmbeddedTemplate")
+    public RedisTemplate<?, ?> redisEmbeddedTemplate() {
         RedisTemplate<byte[], byte[]> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory());
         return redisTemplate;

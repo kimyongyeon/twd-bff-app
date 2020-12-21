@@ -1,4 +1,4 @@
-# 원본코드 주소 
+# 원본소스 주소 
 ```
 git clone https://kimyongyeon@bitbucket.org/kimyongyeon/twd-bff-app.git
 ```
@@ -189,13 +189,17 @@ public interface SampleService {
 
 
 # frontend swagger-ui 
-- swagger-ui: http://localhost:10011/swagger-ui.html
+http://localhost:10011/swagger-ui.html
+
+# block-url
+http://localhost:10011/block/hidden-key
 
 # 프로젝트 최초 구성시
 ## 개발환경
 - https://adoptopenjdk.net/?variant=openjdk15&jvmVariant=hotspot
 - JDK: openJDK8
 - JVM: OpenJ9
+- lombok
  
 ## application.yml 제목, 타이틀 변경
 ```

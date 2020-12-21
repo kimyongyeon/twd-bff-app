@@ -1,4 +1,4 @@
-package com.twd.bff.app.common.block;
+package com.twd.bff.app.common.block.exceptions;
 
 public class BlockApiException extends BaseException {
 
