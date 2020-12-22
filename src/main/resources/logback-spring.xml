@@ -14,7 +14,7 @@
     <springProfile name="local,test">
         <include resource="logger/logback/logback-local.xml"/>
         <logger name="io.netty.util" level="ERROR"/>
-        <logger name="com.twd.bff" level="DEBUG" additivity="false">
+        <logger name="kr.co.tworld.shop.my" level="DEBUG" additivity="false">
             <appender-ref ref="CONSOLE" />
         </logger>
     </springProfile>

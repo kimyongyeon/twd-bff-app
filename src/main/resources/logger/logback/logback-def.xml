@@ -102,7 +102,7 @@
     </logger>
 
 
-    <logger name="com.twd.bff" level="DEBUG" additivity="false">
+    <logger name="kr.co.tworld.shop.my" level="DEBUG" additivity="false">
         <appender-ref ref="CONSOLE" />
         <appender-ref ref="FILELOG_BASE"/>
     </logger>

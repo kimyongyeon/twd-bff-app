@@ -222,7 +222,7 @@ spring:
 groupId, artifactId, name, description 내용을 컴포넌트 특징에 맞게 변경 
 
 ```
-<groupId>com.twd.bff.app</groupId> 
+<groupId>kr.co.tworld.shop.my</groupId> 
 <artifactId>twd-bff-app</artifactId>
 <name>twd-bff-app</name>
 <description>Tworld Direct Backend Front App</description>
@@ -329,10 +329,10 @@ int getNumber();
 - errorThresholdPercentage: 50    `default:50 - 이 설정값 이상의 에러율이 발생하면 circuit을 쇼트시킴`
 
 # 패키지 구조 
-- com.twd.bff.app: root 패키지
-- com.twd.bff.app.biz: 업무 컴포넌트 패키지
-- com.twd.bff.app.common: 공통 컴포넌트 패키지
-- com.twd.bff.app.config: 공통 설정 패키지 
+- kr.co.tworld.shop.my: root 패키지
+- kr.co.tworld.shop.my.biz: 업무 컴포넌트 패키지
+- kr.co.tworld.shop.my.common: 공통 컴포넌트 패키지
+- kr.co.tworld.shop.my.config: 공통 설정 패키지 
 
 # 공통 설정 설명
 - MvcConfiguration: MVC 모델 관련 설정 정보 
