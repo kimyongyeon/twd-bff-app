@@ -15,7 +15,7 @@ spring:
   redis:
     sentinel:
       master: mymaster # Name of the Redis server.
-      nodes: localhost:6379 # Comma-separated list of "host:port" pairs.
+      nodes: a223144e3e3bb4babba901ee54fc39bd-72bd015c248238e5.elb.ap-northeast-2.amazonaws.com:6379 # Comma-separated list of "host:port" pairs.
     database: 0
     password: 1234
     lettuce:
